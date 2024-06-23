@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Details</title>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            background-image: url(images/transport.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .mode_of_transport {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mode_of_transport h1 {
+            margin-bottom: 20px;
+        }
+        .mode_of_transport .transport-option {
+            width: 100%;
+            height: 80px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+        .transport-option h2 {
+            margin: 0;
+            transition: font-size 0.3s;
+        }
+        .transport-option.air {
+            background-image: url(images/air.jpeg);
+            background-size: cover;
+            opacity: 0.7;
+            background-position: center;
+        }
+        .transport-option.water {
+            background-image: url(images/water.webp);
+            background-size: cover;
+            opacity: 0.7;
+            background-position: center;
+        }
+        .transport-option.road {
+            background-image: url(images/road.jpg);
+            background-size: cover;
+            opacity: 0.7;
+            background-position: center;
+        }
+        .transport-option.railway {
+            background-image: url(images/railway.jpg);
+            background-size: cover;
+            opacity: 0.7;
+            background-position: center;
+        }
+        #transport-container .transport-option:hover {
+            opacity: 1;
+            height: 100px;
+        }
+        .form-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            color: black;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-container.visible {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .form-container input, .form-container button, .form-container select {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input[type="radio"] {
+            width: auto;
+        }
+        .form-container button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            border: none;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .form-container label {
+            margin: 10px 0;
+            font-size: 1em;
+            font-weight: bold;
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+        #class-selection, #coach-selection {
+            display: none;
+            margin-top: 20px;
+        }
+        .redirect-icon {
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: 10px;
+            transition: transform 0.3s;
+        }
+        .redirect-icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="mode_of_transport" id="transport-container">
+        <h1 id="transport-title">Select Your Mode of Transport<i class='bx bxs-skip-next-circle redirect-icon'></i></h1>
+        <div class="transport-option air" data-transport="Air Way">
+            <h2>Air Way</h2>
+        </div>
+        <div class="transport-option water" data-transport="Water Way">
+            <h2>Water Way</h2>
+        </div>
+        <div class="transport-option road" data-transport="Road Way">
+            <h2>Road Way</h2>
+        </div>
+        <div class="transport-option railway" data-transport="Railway">
+            <h2>Railway</h2>
+        </div>
+
+        <div id="class-selection">
+            <label for="air_class">Select Class:</label>
+            <select id="air_class">
+                <option value="default">Select the class</option>
+                <option value="economy_class">Economy Class</option>
+                <option value="first_class">First Class</option>
+            </select>
+        </div>
+
+        <div id="coach-selection">
+            <label for="railway_coach">Select Coach:</label>
+            <select id="railway_coach">
+                <option value="default">Select the Coach</option>
+                <option value="non_ac">Non-AC Coach</option>
+                <option value="ac">AC Coach</option>
+            </select>
+        </div>
+
+        <div class="form-container" id="air-form">
+            <h1>Air Way Booking Form</h1>
+            <div id="air-cost"></div>
+            <form action="Booking.html" method="post">
+                <input type="hidden" id="air_class_selected" name="air_class">
+                <input type="hidden" id="air_amount" name="amount">
+                
+                <label for="visa">Do you have visa?</label>
+                <select name="visa" id="visa_requirement">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select><br>
+
+                <label for="pp">Do you have Passport?</label>
+                <select name="pp" id="pp_requirement">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select><br>
+
+                <label for="air-departure">Departure From:</label>
+                <input type="text" id="air-departure" name="departure" placeholder="From where you're starting" required><br>
+
+                <label for="air-date">Departure Date:</label>
+                <input type="date" id="air-date" name="date" required><br>
+
+                <label for="air-food">Food Needed:</label><br>
+                <input class="food" type="radio" id="air-food-yes" name="food" value="yes">
+                <label for="air-food-yes">Yes</label>
+                <input class="food" type="radio" id="air-food-no" name="food" value="no">
+                <label for="air-food-no">No</label><br>
+
+                <input type="hidden" name="transport" value="Air Way">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="form-container" id="water-form">
+            <h1>Water Way Booking Form</h1>
+            <form action="Booking.html" method="post">
+                <label for="water-departure">Departure From:</label>
+                <input type="text" id="water-departure" name="departure" required><br>
+
+                <label for="water-date">Departure Date:</label>
+                <input type="date" id="water-date" name="date" placeholder="From where you're starting" required><br>
+
+                <label for="water-food">Food Needed:</label><br>
+                <input class="food" type="radio" id="water-food-yes" name="food" value="yes">
+                <label for="water-food-yes">Yes</label>
+                <input class="food" type="radio" id="water-food-no" name="food" value="no">
+                <label for="water-food-no">No</label><br>
+
+                <input type="hidden" name="transport" value="Water Way">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="form-container" id="road-form">
+            <h1>Road Way Booking Form</h1>
+            <form action="Booking.html" method="post">
+                <label for="road-departure">Departure From:</label>
+                <input type="text" id="road-departure" name="departure" placeholder="From where you're starting" required><br>
+
+                <label for="road-date">Departure Date:</label>
+                <input type="date" id="road-date" name="date" required><br>
+
+                <label for="road-food">Food Needed:</label><br>
+                <input class="food" type="radio" id="road-food-yes" name="food" value="yes">
+                <label for="road-food-yes">Yes</label>
+                <input class="food" type="radio" id="road-food-no" name="food" value="no">
+                <label for="road-food-no">No</label><br>
+
+                <input type="hidden" name="transport" value="Road Way">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="form-container" id="railway-form">
+            <h1>Railway Booking Form</h1>
+            <div id="railway-cost"></div>
+            <form action="Booking.html" method="post">
+                <input type="hidden" id="railway_coach_selected" name="railway_coach">
+                <input type="hidden" id="railway_amount" name="amount">
+
+                <label for="rail-departure">Departure From:</label>
+                <input type="text" id="rail-departure" name="departure" placeholder="From where you're starting" required><br>
+
+                <label for="rail-date">Departure Date:</label>
+                <input type="date" id="rail-date" name="date" required><br>
+
+                <label for="rail-food">Food Needed:</label><br>
+                <input class="food" type="radio" id="rail-food-yes" name="food" value="yes">
+                <label for="rail-food-yes">Yes</label>
+                <input class="food" type="radio" id="rail-food-no" name="food" value="no">
+                <label for="rail-food-no">No</label><br>
+
+                <input type="hidden" name="transport" value="Railway">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const transportOptions = document.querySelectorAll('.transport-option');
+            const transportTitle = document.getElementById('transport-title');
+            const airForm = document.getElementById('air-form');
+            const waterForm = document.getElementById('water-form');
+            const roadForm = document.getElementById('road-form');
+            const railwayForm = document.getElementById('railway-form');
+            const classSelection = document.getElementById('class-selection');
+            const coachSelection = document.getElementById('coach-selection');
+            const airClass = document.getElementById('air_class');
+            const railwayCoach = document.getElementById('railway_coach');
+            const airCost = document.getElementById('air-cost');
+            const railwayCost = document.getElementById('railway-cost');
+            const airClassSelected = document.getElementById('air_class_selected');
+            const railwayCoachSelected = document.getElementById('railway_coach_selected');
+            const airAmount = document.getElementById('air_amount');
+            const railwayAmount = document.getElementById('railway_amount');
+
+            transportOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const transport = option.getAttribute('data-transport');
+
+                    // Hide all forms initially
+                    airForm.classList.remove('visible');
+                    waterForm.classList.remove('visible');
+                    roadForm.classList.remove('visible');
+                    railwayForm.classList.remove('visible');
+                    classSelection.style.display = 'none';
+                    coachSelection.style.display = 'none';
+
+                    if (transport === 'Air Way') {
+                        classSelection.style.display = 'flex';
+                    } else if (transport === 'Railway') {
+                        coachSelection.style.display = 'flex';
+                    } else if (transport === 'Water Way') {
+                        waterForm.classList.add('visible');
+                    } else if (transport === 'Road Way') {
+                        roadForm.classList.add('visible');
+                    }
+                });
+            });
+
+            airClass.addEventListener('change', function() {
+                const selectedClass = airClass.value;
+                airClassSelected.value = selectedClass;
+
+                if (selectedClass === 'economy_class') {
+                    airCost.textContent = 'Cost: ₹5000';
+                    airAmount.value = 5000;
+                } else if (selectedClass === 'first_class') {
+                    airCost.textContent = 'Cost: ₹10000';
+                    airAmount.value = 10000;
+                } else {
+                    airCost.textContent = '';
+                }
+                airForm.classList.add('visible');
+            });
+
+            railwayCoach.addEventListener('change', function() {
+                const selectedCoach = railwayCoach.value;
+                railwayCoachSelected.value = selectedCoach;
+
+                if (selectedCoach === 'non_ac') {
+                    railwayCost.textContent = 'Cost: ₹2000';
+                    railwayAmount.value = 2000;
+                } else if (selectedCoach === 'ac') {
+                    railwayCost.textContent = 'Cost: ₹4000';
+                    railwayAmount.value = 4000;
+                } else {
+                    railwayCost.textContent = '';
+                }
+                railwayForm.classList.add('visible');
+            });
+
+            const redirectIcon = document.querySelector('.redirect-icon');
+            redirectIcon.addEventListener('click', () => {
+                window.location.href = "Booking.html";
+            });
+        });
+
+        function setDefaultAirCost() {
+            airCostDisplay.textContent = 'Cost: $0';
+            localStorage.setItem('cost', '0');
+        }
+
+        function setDefaultRailwayCost() {
+            railwayCostDisplay.textContent = 'Cost: $0';
+            localStorage.setItem('cost', '0');
+        }
+
+        airClassSelect.addEventListener('change', () => {
+            const selectedClass = airClassSelect.value;
+            let cost = 0;
+
+            if (selectedClass === 'economy_class') {
+                cost = 10000;
+            } else if (selectedClass === 'first_class') {
+                cost = 20000;
+            }
+
+            airClassSelected.value = selectedClass;
+            airCostDisplay.textContent = `Cost: $${cost}`;
+            airAmount.value = cost;
+            localStorage.setItem('cost', cost.toString());
+        });
+
+        railwayCoachSelect.addEventListener('change', () => {
+            const selectedCoach = railwayCoachSelect.value;
+            let cost = 0;
+
+            if (selectedCoach === 'non_ac') {
+                cost = 5000;
+            } else if (selectedCoach === 'ac') {
+                cost = 10000;
+            }
+
+            railwayCoachSelected.value = selectedCoach;
+            railwayCostDisplay.textContent = `Cost: $${cost}`;
+            railwayAmount.value = cost;
+            localStorage.setItem('cost', cost.toString());
+        });
+    </script>
+</body>
+</html>
